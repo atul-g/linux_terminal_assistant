@@ -15,4 +15,7 @@ A terminal assistant which can answer and help out with linux related queries.
 4. Now run `python model_predict.py`.
 
 ### Preview:
+![preview gif](https://github.com/atul-g/linux_terminal_assistant/blob/master/preview.gif)
 
+As you can see, the answer is far from perfect but the fact that the model is able to make proper sentences including proper command syntax is a big positive considering the size of the dataset and the smaller dimensions of model due to less available computing resources.
+The model could improve greatly by increasing the hyper-parameter values, a larger dataset and also by training it for more steps.
