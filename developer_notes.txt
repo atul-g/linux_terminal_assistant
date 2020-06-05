@@ -1,0 +1,72 @@
+1. First used element tree only to extract data from askubuntu and unix-stackexchange to pair question with appropriate top answer. But this is a very slow process, also needs to read the xml file at the starting itself to keep the entire xml tree in memory (the ram consumption would go up by 2gb). So had to look at some other way.
+
+2. Used sqlite3 to write datas. Much faster now Since we were reading xml lines one by one only using python's open, not much ram was used and the process was also faster.
+
+3. Final database of askubuntu and unix.stackexchange still had around 111 rows with null values in question row. Deleted them.
+
+for deleting those rows, used sqlite from terminal itself:
+sqlite <.db file>
+
+> SELECT COUNT(*) FROM dataset WHERE <column name> IS NULL; // THIS WAS DONE FOR EACH COLUMN AND THIS WAY QUESTION COLUMN HAD 111 NULL VALUES
+>DELETE FROM dataset WHERE question IS NULL;
+
+4. to view some rows of database:
+>SELECT * FROM DATASET LIMIT 1; //TO SHOW ONLY FIRST ROW
+>SELECT * FROM DATASET LIMIT 1 OFFSET 2;  //TO SHOW ONLY 1 ROW AFTER 2 COLUMNS.
+
+5. NOW TO DELETE ROW ID AND SCORES:
+>CREATE TABLE dataset_backup AS SELECT question, answer FROM dataset;
+>DROP TABLE dataset;
+>ALTER TABLE dataset_backup RENAME TO dataset;
+
+
+6. SubwordTextEncoder.build_from_corpus() functions takes a long time to execute considering how large our dataset is (377916 samples). So we will be saving the vocabulary that we generate so that next time when we are executing the same script, we dont need to build vocabualry again.
+
+we use tokenizer.save_to_file("path') function for saving.
+
+7. Similiarly the tokenization process also takes a long time, so we after tokenization was done, we wrote the list of tokenized question, answers to a file "tokenized_questions/answers.txt".
+
+
+-----------------training:
+1. trained for 12 epochs: model was - 
+# Hyper-parameters
+NUM_LAYERS = 4 
+D_MODEL = 256
+NUM_HEADS = 8
+UNITS = 512
+DROPOUT = 0.1
+
+2. Continued training the same model again for another 10 epochs. But note, I just realized there is an argument called "initial_epoch" in the model.fit method, and I should have set it to the epoch coninuation number as there are certain hyperparameters and in my case the custom learning rate which depends on the number of training steps completed.
+
+
+----------------- trained another model
+
+1. model dimensions:
+NUM_LAYERS = 4 
+D_MODEL = 400
+NUM_HEADS = 8
+UNITS = 512
+DROPOUT = 0.1
+
+batch size=84
+
+This was the biggest possible model that could be trained in colab without any OOM error.
+Trained it for a total of 30 epochs (it was trained in multiple divisions, with the help of initial_epochs parameter in model.fit() and also saving the trained models as checkpoints.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
