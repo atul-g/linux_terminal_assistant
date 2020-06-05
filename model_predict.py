@@ -56,7 +56,7 @@ model = transformer(
 
 
 model.load_weights('checkpoint/model_30_epochs.ckpt')
-print("\n\n\n")
+print("\n")
 print("Hello there, this is your personal linux assistant at your service :D\nAsk me any queries you have regarding linux OS or Ubuntu and I'll try my best to answer you.\n")
 while True:
 	inp = input("Your input-> ")
